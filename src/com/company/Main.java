@@ -1,85 +1,61 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-class StackFullException extends Exception {}
-
-class StackEmptyException extends Exception {}
 
 
-class Stack<E> {
+class QueueFullException extends Exception {}
+
+class QueueEmptyException extends Exception {}
+
+class Queue<E> {
     private E[] elements;
     private int index = 0;
     private int size;
 
-    Stack(int size) {
+    Queue(int size) {
         elements = (E[]) new Object[size];
         this.size = size;
     }
 
-    public E[] getElements() {
-        return elements;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    E enqueue(){
-        E returnElement = elements[index];
-        index++;
-        return returnElement;
-    }
-
-    E dequeue(){
-       E addElement = elements[index];
-        index--;
-       E[] removeElement = (E[]) (elements[index] = null);
-
-       return addElement;
-    }
-
-    void push(E element ) throws StackFullException {
+    void enqueue(E element) throws QueueFullException{
         if (index >= size) {
-            throw new StackFullException();
+            throw new QueueFullException();
         }
 
         elements[index] = element;
         index++;
     }
 
-    E pop () throws StackEmptyException {
-        if (index == 0) {
-            throw new StackEmptyException();
+    E dequeue () throws QueueEmptyException{
+        if(index == 0){
+            throw new QueueEmptyException();
         }
-
-        E returnElement = elements[index - 1];
+        E returnElement = elements[size - index];
         index--;
         return returnElement;
     }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(elements);
+    }
 }
+
+
 
 
 public class Main {
 
     public static void main(String[] agrs) {
-        Stack<String> strings = new Stack<>(2);
-        List<String> test = new ArrayList<>();
+        Queue<String> strings = new Queue<>(3);
         try {
-            strings.push("Hello");
-            strings.push("World");
-            System.out.println(strings.pop());
-            System.out.println(strings.pop());
-            System.out.println("----");
-            System.out.println(strings.enqueue());
+            strings.enqueue("Test");
+            strings.enqueue("Test2");
+            strings.enqueue("Test3");
             System.out.println(strings.dequeue());
-        } catch (StackFullException | StackEmptyException e) {
+            System.out.println(strings.dequeue());
+            System.out.println(strings.dequeue());
+        } catch (QueueFullException | QueueEmptyException e) {
             e.printStackTrace();
         }
 
